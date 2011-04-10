@@ -23,12 +23,12 @@ If you are using bundler, add it to your project's `Gemfile`:
 
       register Jammit
 
-
   You'll also need to load the jammit configuration file. So in your configure block, run:
 
     ::RAILS_ENV = "development" # this is needed to work around a Jammit limitation
     Jammit.load_configuration("/path/to/config/assets.yml")
 
+  In order to use the `include_javascripts` and `include_stylesheets` you'll need to have working implemetnations of javascript_include_tag and stylesheets_include_tag. You can easily pull these helpers into your existing Sinatra app from Padrino. See instructions [here](http://www.padrinorb.com/guides/standalone-usage-in-sinatra).
 
 ## With Padrino
 
