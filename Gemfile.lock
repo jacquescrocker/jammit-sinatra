@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    jammit-sinatra (0.6.0.0)
+    jammit-sinatra (0.6.0.1)
       jammit (>= 0.6.0)
 
 GEM

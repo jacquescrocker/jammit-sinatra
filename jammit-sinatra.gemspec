@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name      = 'jammit-sinatra'
-  s.version   = '0.6.0.0'
+  s.version   = '0.6.0.1'
 
   s.homepage    = "http://documentcloud.github.com/jammit/"
   s.summary     = "Industrial Strength Asset Packaging for Sinatra/Padrino"
