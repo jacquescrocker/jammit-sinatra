@@ -33,11 +33,3 @@ module Jammit
     end
   end
 end
-
-if defined?(Padrino)
-  Padrino.after_load do
-    # currently need to set RAILS_ENV for jammit (pretty dumb)
-    ::RAILS_ENV = PADRINO_ENV
-    Jammit.load_configuration("#{Padrino.root}/config/assets.yml")
-  end
-end

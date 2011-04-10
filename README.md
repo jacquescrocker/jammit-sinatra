@@ -32,6 +32,4 @@ If you are using bundler, add it to your project's `Gemfile`:
 
 ## With Padrino
 
-jammit-sinatra includes a hook that automatically loads `#{Padrino.root}/config/assets.yml`. In your app, you'll just need to add
-
-    register Jammit
+    padrino-gen plugin jammit
