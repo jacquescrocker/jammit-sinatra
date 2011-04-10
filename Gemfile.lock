@@ -1,0 +1,50 @@
+PATH
+  remote: .
+  specs:
+    jammit-sinatra (0.6.0.0)
+      jammit (>= 0.6.0)
+
+GEM
+  remote: http://rubygems.org/
+  specs:
+    POpen4 (0.1.4)
+      Platform (>= 0.4.0)
+      open4
+    Platform (0.4.0)
+    archive-tar-minitar (0.5.2)
+    closure-compiler (1.1.1)
+    columnize (0.3.2)
+    jammit (0.6.0)
+      closure-compiler (>= 0.1.0)
+      yui-compressor (>= 0.9.1)
+    linecache (0.43)
+    linecache19 (0.5.12)
+      ruby_core_source (>= 0.1.4)
+    open4 (1.0.1)
+    rake (0.8.7)
+    ruby-debug (0.10.4)
+      columnize (>= 0.1)
+      ruby-debug-base (~> 0.10.4.0)
+    ruby-debug-base (0.10.4)
+      linecache (>= 0.3)
+    ruby-debug-base19 (0.11.25)
+      columnize (>= 0.3.1)
+      linecache19 (>= 0.5.11)
+      ruby_core_source (>= 0.1.4)
+    ruby-debug19 (0.11.6)
+      columnize (>= 0.3.1)
+      linecache19 (>= 0.5.11)
+      ruby-debug-base19 (>= 0.11.19)
+    ruby_core_source (0.1.5)
+      archive-tar-minitar (>= 0.5.2)
+    yui-compressor (0.9.6)
+      POpen4 (>= 0.1.4)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  jammit-sinatra!
+  rake
+  ruby-debug
+  ruby-debug19
