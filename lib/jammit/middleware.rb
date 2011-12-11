@@ -10,6 +10,7 @@ module Jammit
 
     SUFFIX_STRIPPER = /-(datauri|mhtml)\Z/
 
+    PUBLIC_ROOT     = defined?(Jammit.public_root) ? Jammit.public_root : PUBLIC_ROOT
     NOT_FOUND_PATH  = "#{PUBLIC_ROOT}/404.html"
 
     def initialize(app)
