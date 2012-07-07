@@ -34,6 +34,7 @@ module Jammit
     # The "package" action receives all requests for asset packages that haven't
     # yet been cached. The package will be built, cached, and gzipped.
     def package(package, extension)
+      @asset_file = File.join PUBLIC_ROOT, Jammit.package_path, "#{package}.#{extension}"
       parse_request(package, extension)
       template_ext = Jammit.template_extension.to_sym
       result = []
@@ -45,7 +46,7 @@ module Jammit
 
       case @extension
       when :js
-        @contents = Jammit.packager.pack_javascripts(@package)
+        @contents = (should_compile? ? Jammit.packager.pack_javascripts(@package) : read_asset_file)
         @contents = @contents.to_js if @contents.respond_to?(:to_js)
         result = [
           200,
@@ -55,7 +56,7 @@ module Jammit
           [@contents]
         ]
       when template_ext
-        @contents = Jammit.packager.pack_templates(@package)
+        @contents = (should_compile? ? Jammit.packager.pack_templates(@package) : read_asset_file)
         @contents = @contents.to_js if @contents.respond_to?(:to_js)
         [
           200,
@@ -70,7 +71,7 @@ module Jammit
           headers.merge({
             'Content-Type' => Rack::Mime.mime_type(".css")
           }),
-          [generate_stylesheets]
+          [(should_compile? ? generate_stylesheets : read_asset_file)]
         ]
       end
     rescue Jammit::PackageNotFound
@@ -109,6 +110,18 @@ module Jammit
         pack.sub!(SUFFIX_STRIPPER, '')
       end
       @package = pack.to_sym
+    end
+
+    # Borrowed from Jammit compressor internals.
+    def read_asset_file
+      puts "Reading precached #{@asset_file}"
+      File.open(@asset_file, 'rb:UTF-8') {|f| f.read }
+    end
+
+    # Presume that the ready-to-serve assets should not be recompiled in a
+    # non-development environment.
+    def should_compile?
+      (not File.file?(@asset_file)) or Jammit.development?
     end
 
   end

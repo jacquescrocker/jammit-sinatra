@@ -21,7 +21,13 @@ end
 # provides hook so you can run
 # register Jammit in your
 module Jammit
+
+  def self.development?
+    @@development
+  end
+
   def self.registered(app)
+    @@development = app.development?
     app.helpers Jammit::Helper
     app.helpers Jammit::HelperOverrides
 
