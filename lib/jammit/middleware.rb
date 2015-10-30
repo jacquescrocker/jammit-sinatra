@@ -23,7 +23,7 @@ module Jammit
 
     def _call(env)
       if matches = %r(^/#{Jammit.package_path}/(.*)\.(.*)).match(env['PATH_INFO'])
-        package(matches[1].to_s, matches[2] || "none")
+        package(matches[1].to_s, matches[2] || "none", env)
       else
         @app.call(env)
       end
@@ -33,7 +33,7 @@ module Jammit
 
     # The "package" action receives all requests for asset packages that haven't
     # yet been cached. The package will be built, cached, and gzipped.
-    def package(package, extension)
+    def package(package, extension, env)
       parse_request(package, extension)
       template_ext = Jammit.template_extension.to_sym
       result = []
@@ -65,12 +65,13 @@ module Jammit
           [@contents]
         ]
       when :css
+        request = Rack::Request.new(env)
         [
           200,
           headers.merge({
             'Content-Type' => Rack::Mime.mime_type(".css")
           }),
-          [generate_stylesheets]
+          [generate_stylesheets(request)]
         ]
       end
     rescue Jammit::PackageNotFound
@@ -80,19 +81,19 @@ module Jammit
     # Generate the complete, timestamped, MHTML url -- if we're rendering a
     # dynamic MHTML package, we'll need to put one URL in the response, and a
     # different one into the cached package.
-    def prefix_url(path)
+    def prefix_url(request, path)
       host = request.port == 80 ? request.host : request.host_with_port
-      "#{request.protocol}#{host}#{path}"
+      "#{request.env['rack.url_scheme']}://#{request.env['HTTP_HOST']}#{path}"
     end
 
     # If we're generating MHTML/CSS, return a stylesheet with the absolute
     # request URL to the client, and cache a version with the timestamped cache
     # URL swapped in.
-    def generate_stylesheets
+    def generate_stylesheets(request)
       return @contents = Jammit.packager.pack_stylesheets(@package, @variant) unless @variant == :mhtml
       @mtime      = Time.now
-      request_url = prefix_url(request.fullpath)
-      cached_url  = prefix_url(Jammit.asset_url(@package, @extension, @variant, @mtime))
+      request_url = prefix_url(request, request.fullpath)
+      cached_url  = prefix_url(request, Jammit.asset_url(@package, @extension, @variant, @mtime))
       css         = Jammit.packager.pack_stylesheets(@package, @variant, request_url)
       # @contents   = css.gsub(request_url, cached_url) if perform_caching
       css
